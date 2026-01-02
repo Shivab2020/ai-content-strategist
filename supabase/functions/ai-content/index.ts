@@ -93,9 +93,10 @@ Return JSON: { "content": "full markdown content", "seoScores": { "overall": 85,
     }
 
     throw new Error("Failed to parse AI response");
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("AI content error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
